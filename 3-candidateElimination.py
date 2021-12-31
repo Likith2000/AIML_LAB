@@ -1,5 +1,5 @@
 dataarr = []
-with open('candidateEliminationData.csv') as f:
+with open('3-candidateEliminationData.csv') as f:
     for line in f:
         dataarr.append(line.strip().split(','))
 rows = len(dataarr)
