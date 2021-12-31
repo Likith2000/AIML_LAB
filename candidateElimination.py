@@ -1,5 +1,5 @@
 dataarr = []
-with open('data.csv') as f:
+with open('candidateEliminationData.csv') as f:
     for line in f:
         dataarr.append(line.strip().split(','))
 rows = len(dataarr)
@@ -14,10 +14,10 @@ for x in range(1, rows):
         for i in range(0, cols-1):
             if shypo[i] == lst[i]:
                 continue
-        shypo[i] = '?' if shypo[i] != '0' else lst[i]
-        for g in ghypo:
-            if g[i] != '?' and shypo[i] == '?':
-                ghypo.remove(g)
+            shypo[i] = '?' if shypo[i] != '0' else lst[i]
+            for g in ghypo:
+                if g[i] != '?' and shypo[i] == '?':
+                    ghypo.remove(g)
     elif lst[cols-1] == "0":
         ghypo.clear()
         for i in range(0, cols-1):

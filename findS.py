@@ -2,7 +2,7 @@
 import pandas as pd
 import numpy as np
 
-data = pd.read_csv("data1.csv")
+data = pd.read_csv("findSData.csv")
 
 d = np.array(data)[:, :-1]
 print("\nThe attributes are:\n", d)

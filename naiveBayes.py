@@ -7,28 +7,23 @@ def loadcsv(filename):
     lines = csv.reader(open(filename, "r"))
     dataset = list(lines)
     for i in range(len(dataset)):
-       # converting strings into numbers for processing
         dataset[i] = [float(x) for x in dataset[i]]
 
     return dataset
 
 
 def splitdataset(dataset, splitratio):
-    # 67% training size
     trainsize = int(len(dataset) * splitratio)
     trainset = []
     copy = list(dataset)
     while len(trainset) < trainsize:
-        # generate indices for the dataset list randomly to pick ele for training data
         index = random.randrange(len(copy))
         trainset.append(copy.pop(index))
     return [trainset, copy]
 
 
 def separatebyclass(dataset):
-    separated = {}  # dictionary of classes 1 and 0
-# creates a dictionary of classes 1 and 0 where the values are
-# the instances belonging to each class
+    separated = {}
     for i in range(len(dataset)):
         vector = dataset[i]
         if (vector[-1] not in separated):
@@ -47,21 +42,17 @@ def stdev(numbers):
     return math.sqrt(variance)
 
 
-def summarize(dataset):  # creates a dictionary of classes
+def summarize(dataset):
     summaries = [(mean(attribute), stdev(attribute))
                  for attribute in zip(*dataset)]
-    del summaries[-1]  # excluding labels +ve or -ve
+    del summaries[-1]
     return summaries
 
 
 def summarizebyclass(dataset):
     separated = separatebyclass(dataset)
-    # print(separated)
     summaries = {}
     for classvalue, instances in separated.items():
-        # for key,value in dic.items()
-        # summaries is a dic of tuples(mean,std) for each class value
-        # summarize is used to cal to mean and std
         summaries[classvalue] = summarize(instances)
     return summaries
 
@@ -72,22 +63,20 @@ def calculateprobability(x, mean, stdev):
 
 
 def calculateclassprobabilities(summaries, inputvector):
-    probabilities = {}  # probabilities contains the all prob of all class of test data
-    for classvalue, classsummaries in summaries.items():  # class and attribute information as mean and sd
+    probabilities = {}
+    for classvalue, classsummaries in summaries.items():
         probabilities[classvalue] = 1
         for i in range(len(classsummaries)):
-            # take mean and sd of every attribute for class 0 and 1 seperaely
             mean, stdev = classsummaries[i]
-            x = inputvector[i]  # testvector's first attribute
-            # use normal dist
+            x = inputvector[i]
             probabilities[classvalue] *= calculateprobability(x, mean, stdev)
     return probabilities
 
 
-def predict(summaries, inputvector):  # training and test data is passed
+def predict(summaries, inputvector):
     probabilities = calculateclassprobabilities(summaries, inputvector)
     bestLabel, bestProb = None, -1
-    for classvalue, probability in probabilities.items():  # assigns that class which has he highest prob
+    for classvalue, probability in probabilities.items():
         if bestLabel is None or probability > bestProb:
             bestProb = probability
             bestLabel = classvalue
@@ -111,18 +100,14 @@ def getaccuracy(testset, predictions):
 
 
 def main():
-    filename = '5-dataset.csv'
+    filename = 'naiveBayesData.csv'
     splitratio = 0.67
     dataset = loadcsv(filename)
 
     trainingset, testset = splitdataset(dataset, splitratio)
     print('Split {0} rows into train={1} and test={2} rows'.format(
         len(dataset), len(trainingset), len(testset)))
-    # prepare model
     summaries = summarizebyclass(trainingset)
-    # print(summaries)
-    # test model
-    # find the predictions of test data with the training data
     predictions = getpredictions(summaries, testset)
     accuracy = getaccuracy(testset, predictions)
     print('Accuracy of the classifier is : {0}%'.format(accuracy))
