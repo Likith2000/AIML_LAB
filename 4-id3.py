@@ -25,13 +25,13 @@ def entropy(examples):
         else:
             neg += 1
     if pos == 0.0 or neg == 0.0:
-        #print('Enteropy is '+str(entropy))
+        #print('Entropy is '+str(entropy))
         return entropy
     else:
         p = pos / (pos + neg)
         n = neg / (pos + neg)
         entropy = -(p * math.log(p, 2) + n * math.log(n, 2))
-        #print('Enteropy is '+str(entropy))
+        #print('Entropy is '+str(entropy))
         return entropy
 
 
@@ -43,7 +43,7 @@ def info_gain(examples, attr):
         subdata = examples[examples[attr] == u]
         #print ("\n",subdata)
         sub_e = entropy(subdata)
-        print('Enteropy for ' + u + ' is '+str(sub_e))
+        print('Entropy for ' + u + ' is '+str(sub_e))
         gain -= (float(len(subdata)) / float(len(examples))) * sub_e
     #print ("\nInformation gain for "+attr+" is " + str(gain))
     return gain

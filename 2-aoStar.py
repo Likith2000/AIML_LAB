@@ -10,28 +10,23 @@ class Graph:
         self.solutionGraph = {}
 
     def applyAOStar(self):
-        # starts a recursive AO* algorithm
-        self.aoStar(self.start, False)
+        self.aoStar(self.start, False)  # starts a recursive AO* algorithm
 
     def getNeighbors(self, v):
-        # gets the Neighbors of a given node
-        return self.graph.get(v, '')
+        return self.graph.get(v, '')  # gets the Neighbors of a given node
 
     def getStatus(self, v):
-        # return the status of a given node
-        return self.status.get(v, 0)
+        return self.status.get(v, 0)  # return the status of a given node
 
     def setStatus(self, v, val):
-        # set the status of a given node
-        self.status[v] = val
+        self.status[v] = val  # set the status of a given node
 
     def getHeuristicNodeValue(self, n):
         # always return the heuristic value of a given node
         return self.H.get(n, 0)
 
     def setHeuristicNodeValue(self, n, value):
-        # set the revised heuristic value of a given node
-        self.H[n] = value
+        self.H[n] = value  # set the revised heuristic value of a given node
 
     def printSolution(self):
         print("FOR GRAPH SOLUTION, TRAVERSE THE GRAPH FROM THE START NODE:", self.start)
@@ -45,7 +40,7 @@ class Graph:
         costToChildNodeListDict = {}
         costToChildNodeListDict[minimumCost] = []
         flag = True
-        # iterate over all the set of child node/s
+        # iterate over all the set of child nodes
         for nodeInfoTupleList in self.getNeighbors(v):
             cost = 0
             nodeList = []
@@ -53,18 +48,17 @@ class Graph:
                 cost = cost+self.getHeuristicNodeValue(c)+weight
                 nodeList.append(c)
             if flag == True:
-                # initialize Minimum Cost with the cost of first set of child node/s
-                minimumCost = cost
-                # set the Minimum Cost child node/s
+                minimumCost = cost  # initialize Minimum Cost with the cost of first set of child nodes
+                # set the Minimum Cost child nodes
                 costToChildNodeListDict[minimumCost] = nodeList
                 flag = False
             else:
                 # checking the Minimum Cost nodes with the current Minimum Cost
                 if minimumCost > cost:
                     minimumCost = cost
-                    # set the Minimum Cost child node/s
+                    # set the Minimum Cost child nodes
                     costToChildNodeListDict[minimumCost] = nodeList
-        # return Minimum Cost and Minimum Cost child node/s
+        # return Minimum Cost and Minimum Cost child nodes
         return minimumCost, costToChildNodeListDict[minimumCost]
 
     def aoStar(self, v, backTracking):
@@ -102,10 +96,10 @@ class Graph:
                     self.aoStar(childNode, False)
 
 
-print("Graph - 1")
-h1 = {'A': 1, 'B': 6, 'C': 2, 'D': 12, 'E': 2,
-      'F': 1, 'G': 5, 'H': 7, 'I': 7, 'J': 1}
-graph1 = {
+print("Graph")
+h = {'A': 1, 'B': 6, 'C': 2, 'D': 12, 'E': 2,
+     'F': 1, 'G': 5, 'H': 7, 'I': 7, 'J': 1}
+graph = {
     'A': [[('B', 1), ('C', 1)], [('D', 1)]],
     'B': [[('G', 1)], [('H', 1)]],
     'C': [[('J', 1)]],
@@ -113,6 +107,6 @@ graph1 = {
     'G': [[('I', 1)]]
 }
 
-G1 = Graph(graph1, h1, 'A')
-G1.applyAOStar()
-G1.printSolution()
+G = Graph(graph, h, 'A')
+G.applyAOStar()
+G.printSolution()
