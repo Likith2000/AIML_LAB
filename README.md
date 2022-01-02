@@ -1,3 +1,3 @@
 # AIML_LAB
 
-VTU AIML LAB Programs
+VTU-AIML LAB Programs
