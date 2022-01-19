@@ -12,7 +12,7 @@ f1 = df1['Distance_Feature'].values
 f2 = df1['Speeding_Feature'].values
 
 
-X = np.matrix(list(zip(f1, f2)))
+X = np.asarray(list(zip(f1, f2)))
 
 plt.plot(1)
 plt.subplot(511)
