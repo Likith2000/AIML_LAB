@@ -8,7 +8,6 @@ def loadcsv(filename):
     dataset = list(lines)
     for i in range(len(dataset)):
         dataset[i] = [float(x) for x in dataset[i]]
-
     return dataset
 
 
@@ -99,18 +98,13 @@ def getaccuracy(testset, predictions):
     return (correct/float(len(testset))) * 100.0
 
 
-def main():
-    filename = '6-naiveBayesData.csv'
-    splitratio = 0.67
-    dataset = loadcsv(filename)
-
-    trainingset, testset = splitdataset(dataset, splitratio)
-    print('Split {0} rows into train={1} and test={2} rows'.format(
-        len(dataset), len(trainingset), len(testset)))
-    summaries = summarizebyclass(trainingset)
-    predictions = getpredictions(summaries, testset)
-    accuracy = getaccuracy(testset, predictions)
-    print('Accuracy of the classifier is : {0}%'.format(accuracy))
-
-
-main()
+filename = '6-naiveBayesData.csv'
+splitratio = 0.67
+dataset = loadcsv(filename)
+trainingset, testset = splitdataset(dataset, splitratio)
+print('Split {0} rows into train={1} and test={2} rows'.format(
+    len(dataset), len(trainingset), len(testset)))
+summaries = summarizebyclass(trainingset)
+predictions = getpredictions(summaries, testset)
+accuracy = getaccuracy(testset, predictions)
+print('Accuracy of the classifier is : {0}%'.format(accuracy))
