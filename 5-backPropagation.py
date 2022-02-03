@@ -5,23 +5,17 @@ y = np.array(([92], [86], [89]), dtype=float)
 X = X/np.amax(X, axis=0)  # maximum of X array longitudinally
 y = y/100
 
-# Sigmoid Function
-
 
 def sigmoid(x):
     return 1/(1 + np.exp(-x))
-
-# Derivative of Sigmoid Function
 
 
 def derivatives_sigmoid(x):
     return x * (1 - x)
 
 
-# Variable initialization
 epoch = 5  # Setting training iterations
 lr = 0.1  # Setting learning rate
-
 inputlayer_neurons = 2  # number of features in data set
 hiddenlayer_neurons = 3  # number of hidden layers neurons
 output_neurons = 1  # number of neurons at output layer
@@ -51,7 +45,7 @@ for i in range(epoch):
     hiddengrad = derivatives_sigmoid(hlayer_act)
     d_hiddenlayer = EH * hiddengrad
 
-    # dotproduct of nextlayererror and currentlayerop
+    # dotproduct of nextlayererror and current layer op
     wout += hlayer_act.T.dot(d_output) * lr
     wh += X.T.dot(d_hiddenlayer) * lr
 

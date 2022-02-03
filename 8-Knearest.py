@@ -4,7 +4,6 @@ from sklearn.model_selection import train_test_split
 from sklearn import metrics
 
 names = ['sepal-length', 'sepal-width', 'petal-length', 'petal-width', 'Class']
-
 dataset = pd.read_csv("8-dataset.csv", names=names)
 X = dataset.iloc[:, :-1]
 Y = dataset.iloc[:, -1]
