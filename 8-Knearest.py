@@ -19,11 +19,10 @@ print('%-25s %-25s %-25s' %
       ('Original Label', 'Predicted Label', 'Correct/Wrong'))
 print("------------------------------------------------------------------")
 for label in ytest:
-    print('%-25s %-25s' % (label, ypred[i]), end="")
     if (label == ypred[i]):
-        print(' %-25s' % ('Correct'))
+        print('%-25s %-25s %-25s' % (label, ypred[i], 'Correct'))
     else:
-        print(' %-25s' % ('Wrong'))
+        print('%-25s %-25s %-25s' % (label, ypred[i], 'Wrong'))
     i = i + 1
 
 # print("\nConfusion Matrix:\n", metrics.confusion_matrix(ytest, ypred))
