@@ -1,6 +1,7 @@
 import csv
 import random
 import math
+import statistics
 
 
 def loadcsv(filename):
@@ -18,7 +19,7 @@ def splitdataset(dataset, splitratio):
     while len(trainset) < trainsize:
         index = random.randrange(len(copy))
         trainset.append(copy.pop(index))
-    return [trainset, copy]
+    return trainset, copy
 
 
 def separatebyclass(dataset):
@@ -31,18 +32,8 @@ def separatebyclass(dataset):
     return separated
 
 
-def mean(numbers):
-    return sum(numbers)/float(len(numbers))
-
-
-def stdev(numbers):
-    avg = mean(numbers)
-    variance = sum([pow(x-avg, 2) for x in numbers])/float(len(numbers)-1)
-    return math.sqrt(variance)
-
-
 def summarize(dataset):
-    summaries = [(mean(attribute), stdev(attribute))
+    summaries = [(statistics.mean(attribute), statistics.stdev(attribute))
                  for attribute in zip(*dataset)]
     del summaries[-1]
     return summaries
