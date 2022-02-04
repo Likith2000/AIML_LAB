@@ -1,101 +1,40 @@
-import csv
-import random
-import math
-import statistics
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import train_test_split
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+from sklearn.naive_bayes import GaussianNB
 
+# load data from CSV
+data = pd.read_csv('6-naiveBayesData.csv')
+print("THe first 5 values of data is :\n", data.head())
 
-def loadcsv(filename):
-    lines = csv.reader(open(filename, "r"))
-    dataset = list(lines)
-    for i in range(len(dataset)):
-        dataset[i] = [float(x) for x in dataset[i]]
-    return dataset
+# obtain Train data and Train output
+X = data.iloc[:, :-1]
+print("\nThe First 5 values of train data is\n", X.head())
+y = data.iloc[:, -1]
+print("\nThe first 5 values of Train output is\n", y.head())
 
+# Convert then in numbers
+le_outlook = LabelEncoder()
+X.Outlook = le_outlook.fit_transform(X.Outlook)
 
-def splitdataset(dataset, splitratio):
-    trainsize = int(len(dataset) * splitratio)
-    trainset = []
-    copy = list(dataset)
-    while len(trainset) < trainsize:
-        index = random.randrange(len(copy))
-        trainset.append(copy.pop(index))
-    return trainset, copy
+le_Temperature = LabelEncoder()
+X.Temperature = le_Temperature.fit_transform(X.Temperature)
 
+le_Humidity = LabelEncoder()
+X.Humidity = le_Humidity.fit_transform(X.Humidity)
 
-def separatebyclass(dataset):
-    separated = {}
-    for i in range(len(dataset)):
-        vector = dataset[i]
-        if (vector[-1] not in separated):
-            separated[vector[-1]] = []
-        separated[vector[-1]].append(vector)
-    return separated
+le_Windy = LabelEncoder()
+X.Windy = le_Windy.fit_transform(X.Windy)
 
+print("\nNow the Train data is :\n", X.head())
 
-def summarize(dataset):
-    summaries = [(statistics.mean(attribute), statistics.stdev(attribute))
-                 for attribute in zip(*dataset)]
-    del summaries[-1]
-    return summaries
+le_PlayTennis = LabelEncoder()
+y = le_PlayTennis.fit_transform(y)
 
+print("\nNow the Train output is\n", y)
 
-def summarizebyclass(dataset):
-    separated = separatebyclass(dataset)
-    summaries = {}
-    for classvalue, instances in separated.items():
-        summaries[classvalue] = summarize(instances)
-    return summaries
-
-
-def calculateprobability(x, mean, stdev):
-    exponent = math.exp(-(math.pow(x-mean, 2)/(2*math.pow(stdev, 2))))
-    return (1 / (math.sqrt(2*math.pi) * stdev)) * exponent
-
-
-def calculateclassprobabilities(summaries, inputvector):
-    probabilities = {}
-    for classvalue, classsummaries in summaries.items():
-        probabilities[classvalue] = 1
-        for i in range(len(classsummaries)):
-            mean, stdev = classsummaries[i]
-            x = inputvector[i]
-            probabilities[classvalue] *= calculateprobability(x, mean, stdev)
-    return probabilities
-
-
-def predict(summaries, inputvector):
-    probabilities = calculateclassprobabilities(summaries, inputvector)
-    bestLabel, bestProb = None, -1
-    for classvalue, probability in probabilities.items():
-        if bestLabel is None or probability > bestProb:
-            bestProb = probability
-            bestLabel = classvalue
-    return bestLabel
-
-
-def getpredictions(summaries, testset):
-    predictions = []
-    for i in range(len(testset)):
-        result = predict(summaries, testset[i])
-        predictions.append(result)
-    return predictions
-
-
-def getaccuracy(testset, predictions):
-    correct = 0
-    for i in range(len(testset)):
-        if testset[i][-1] == predictions[i]:
-            correct += 1
-    return (correct/float(len(testset))) * 100.0
-
-
-filename = '6-naiveBayesData.csv'
-splitratio = 0.67
-dataset = loadcsv(filename)
-trainingset, testset = splitdataset(dataset, splitratio)
-print('Split {0} rows into train={1} and test={2} rows'.format(
-    len(dataset), len(trainingset), len(testset)))
-summaries = summarizebyclass(trainingset)
-predictions = getpredictions(summaries, testset)
-accuracy = getaccuracy(testset, predictions)
-print('Accuracy of the classifier is : {0}%'.format(accuracy))
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20)
+classifier = GaussianNB()
+classifier.fit(X_train, y_train)
+print("Accuracy is:", accuracy_score(classifier.predict(X_test), y_test))
