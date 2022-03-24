@@ -1,46 +1,27 @@
+import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-import numpy as np
 
+tou = 0.5
+data = pd.read_csv("9-dataset.csv")
+X_train = np.array(data.total_bill)
+X_train = X_train[:, np.newaxis]
+y_train = np.array(data.tip)
+X_test = np.array([i / 10 for i in range(500)])
+X_test = X_test[:, np.newaxis]
+y_test = []
+count = 0
 
-def kernel(point, xmat, k):
-    m, n = np.shape(xmat)
-    weights = np.mat(np.eye((m)))
-    for j in range(m):
-        diff = point - X[j]
-        weights[j, j] = np.exp(diff*diff.T/(-2.0*k**2))
-    return weights
+for r in range(len(X_test)):
+    wts = np.exp(-np.sum((X_train - X_test[r]) ** 2, axis=1) / (2 * tou ** 2))
+    W = np.diag(wts)
+    factor1 = np.linalg.inv(X_train.T.dot(W).dot(X_train))
+    parameters = factor1.dot(X_train.T).dot(W).dot(y_train)
+    prediction = X_test[r].dot(parameters)
+    y_test.append(prediction)
+    count += 1
 
-
-def localWeight(point, xmat, ymat, k):
-    wei = kernel(point, xmat, k)
-    W = (X.T*(wei*X)).I*(X.T*(wei*ymat.T))
-    return W
-
-
-def localWeightRegression(xmat, ymat, k):
-    m, n = np.shape(xmat)
-    ypred = np.zeros(m)
-    for i in range(m):
-        ypred[i] = xmat[i]*localWeight(xmat[i], xmat, ymat, k)
-    return ypred
-
-
-data = pd.read_csv('9-dataset.csv')
-bill = np.array(data.total_bill)
-tip = np.array(data.tip)
-mbill = np.mat(bill)
-mtip = np.mat(tip)
-m = np.shape(mbill)[1]
-one = np.mat(np.ones(m))
-X = np.hstack((one.T, mbill.T))
-ypred = localWeightRegression(X, mtip, 0.5)
-SortIndex = X[:, 1].argsort(0)
-xsort = X[SortIndex][:, 0]
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
-ax.scatter(bill, tip, color='green')
-ax.plot(xsort[:, 1], ypred[SortIndex], color='red', linewidth=5)
-plt.xlabel('Total bill')
-plt.ylabel('Tip')
+y_test = np.array(y_test)
+plt.plot(X_train.squeeze(), y_train, 'o')
+plt.plot(X_test.squeeze(), y_test, 'o')
 plt.show()
