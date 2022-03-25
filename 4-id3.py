@@ -25,27 +25,21 @@ def entropy(examples):
         else:
             neg += 1
     if pos == 0.0 or neg == 0.0:
-        #print('Entropy is '+str(entropy))
         return entropy
     else:
         p = pos / (pos + neg)
         n = neg / (pos + neg)
         entropy = -(p * math.log(p, 2) + n * math.log(n, 2))
-        #print('Entropy is '+str(entropy))
         return entropy
 
 
 def info_gain(examples, attr):
     uniq = np.unique(examples[attr])
-    #print ("\n",uniq)
     gain = entropy(examples)
     for u in uniq:
         subdata = examples[examples[attr] == u]
-        #print ("\n",subdata)
         sub_e = entropy(subdata)
-        print('Entropy for ' + u + ' is '+str(sub_e))
         gain -= (float(len(subdata)) / float(len(examples))) * sub_e
-    #print ("\nInformation gain for "+attr+" is " + str(gain))
     return gain
 
 
@@ -55,7 +49,6 @@ def ID3(examples, attrs):
     max_gain = 0
     max_feat = ""
     for feature in attrs:
-        #print ("\n",examples)
         gain = info_gain(examples, feature)
         print("Gain for "+feature+" is: ", gain)
         if gain > max_gain:
@@ -65,11 +58,8 @@ def ID3(examples, attrs):
     print("\nMax feature attribute is " + max_feat + "\n\n")
 
     uniq = np.unique(examples[max_feat])
-    #print ("\n",uniq)
     for u in uniq:
-        #print ("\n",u)
         subdata = examples[examples[max_feat] == u]
-        #print ("\n",subdata)
         if entropy(subdata) == 0.0:
             newNode = Node()
             newNode.isLeaf = True
