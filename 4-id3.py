@@ -45,7 +45,6 @@ def info_gain(examples, attr):
 
 def ID3(examples, attrs):
     root = Node()
-
     max_gain = 0
     max_feat = ""
     for feature in attrs:
@@ -56,7 +55,6 @@ def ID3(examples, attrs):
             max_feat = feature
     root.value = max_feat
     print("\nMax feature attribute is " + max_feat + "\n\n")
-
     uniq = np.unique(examples[max_feat])
     for u in uniq:
         subdata = examples[examples[max_feat] == u]
