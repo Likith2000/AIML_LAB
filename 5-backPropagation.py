@@ -44,7 +44,6 @@ for i in range(epoch):
     # how much hidden layer wts contributed to error
     hiddengrad = derivatives_sigmoid(hlayer_act)
     d_hiddenlayer = EH * hiddengrad
-
     # dotproduct of nextlayererror and current layer op
     wout += hlayer_act.T.dot(d_output) * lr
     wh += X.T.dot(d_hiddenlayer) * lr
@@ -54,7 +53,3 @@ for i in range(epoch):
     print("Actual Output: \n" + str(y))
     print("Predicted Output: \n", output)
     print("-----------Epoch-", i+1, "Ends----------\n")
-
-print("Input: \n" + str(X))
-print("Actual Output: \n" + str(y))
-print("Predicted Output: \n", output)
