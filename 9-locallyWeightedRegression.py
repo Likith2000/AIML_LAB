@@ -10,7 +10,6 @@ y_train = np.array(data.tip)
 X_test = np.array([i / 10 for i in range(500)])
 X_test = X_test[:, np.newaxis]
 y_test = []
-count = 0
 
 for r in range(len(X_test)):
     wts = np.exp(-np.sum((X_train - X_test[r]) ** 2, axis=1) / (2 * tou ** 2))
@@ -19,7 +18,6 @@ for r in range(len(X_test)):
     parameters = factor1.dot(X_train.T).dot(W).dot(y_train)
     prediction = X_test[r].dot(parameters)
     y_test.append(prediction)
-    count += 1
 
 y_test = np.array(y_test)
 plt.plot(X_train.squeeze(), y_train, 'o')
