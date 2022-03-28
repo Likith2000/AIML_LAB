@@ -1,8 +1,6 @@
 import pandas as pd
 from collections import Counter
 import math
-data = pd.read_csv('4-id3Data.csv')
-print("\n Given Play data Data Set:\n\n", data)
 
 
 def entropy(alist):
@@ -12,7 +10,7 @@ def entropy(alist):
     return sum([-p*math.log(p, 2) for p in prob])
 
 
-def information_gain(d, split, target):
+def gain(d, target, split):
     splitting = d.groupby(split)
     n = len(d.index)
     agent = splitting.agg(
@@ -28,9 +26,9 @@ def id3(sub, target, a):
     if len(count) == 1:
         return next(iter(count))
     else:
-        gain = [information_gain(sub, attr, target) for attr in a]
-        print("Gain=", gain)
-        maximum = gain.index(max(gain))
+        Igain = [gain(sub, target, attr) for attr in a]
+        print("Gain=", Igain)
+        maximum = Igain.index(max(Igain))
         best = a[maximum]
         print("Best Attribute:", best)
         tree = {best: {}}
@@ -41,11 +39,11 @@ def id3(sub, target, a):
         return tree
 
 
+data = pd.read_csv('4-id3Data.csv')
 names = list(data.columns)
 print("List of Attributes:", names)
-
-names.remove('PlayTennis')
+names.remove('answer')
 print("Predicting Attributes:", names)
-tree = id3(data, 'PlayTennis', names)
+tree = id3(data, 'answer', names)
 print("\n\nThe Resultant Decision Tree is :\n")
 print(tree)
