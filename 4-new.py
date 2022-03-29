@@ -4,20 +4,19 @@ import math
 
 
 def entropy(alist):
-    c = Counter(x for x in alist)
-    instances = len(alist)
-    prob = [x / instances for x in c.values()]
+    count = Counter(x for x in alist)
+    length = len(alist)
+    prob = [x / length for x in count.values()]
     return sum([-p*math.log(p, 2) for p in prob])
 
 
-def gain(d, target, split):
-    splitting = d.groupby(split)
-    n = len(d.index)
-    agent = splitting.agg(
-        {target: [entropy, lambda x: len(x)/n]})[target]
+def gain(data, target, split):
+    splitting = data.groupby(split)
+    n = len(data.index)
+    agent = splitting.agg({target: [entropy, lambda x: len(x)/n]})[target]
     agent.columns = ['Entropy', 'observations']
     newentropy = sum(agent['Entropy'] * agent['observations'])
-    oldentropy = entropy(d[target])
+    oldentropy = entropy(data[target])
     return oldentropy - newentropy
 
 

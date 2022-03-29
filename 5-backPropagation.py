@@ -26,20 +26,18 @@ wout = np.random.uniform(size=(hiddenlayer_neurons, output_neurons))
 bout = np.random.uniform(size=(1, output_neurons))
 
 for i in range(epoch):
-    hinp1 = np.dot(X, wh)
-    hinp = hinp1 + bh
-    hlayer_act = sigmoid(hinp)
-    outinp1 = np.dot(hlayer_act, wout)
-    outinp = outinp1+bout
+    hinp = np.dot(X, wh)
+    hinp += bh
+    hlayer_out = sigmoid(hinp)
+    outinp = np.dot(hlayer_out, wout)
+    outinp += bout
     output = sigmoid(outinp)
 
     EO = y-output
-    outgrad = derivatives_sigmoid(output)
-    d_output = EO * outgrad
+    d_output = EO * derivatives_sigmoid(output)
     EH = d_output.dot(wout.T)
-    hiddengrad = derivatives_sigmoid(hlayer_act)
-    d_hiddenlayer = EH * hiddengrad
-    wout += hlayer_act.T.dot(d_output) * lr
+    d_hiddenlayer = EH * derivatives_sigmoid(hlayer_out)
+    wout += hlayer_out.T.dot(d_output) * lr
     wh += X.T.dot(d_hiddenlayer) * lr
 
     print("-----------Epoch-", i+1, "Starts----------")

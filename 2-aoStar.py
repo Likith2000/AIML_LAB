@@ -1,8 +1,8 @@
 # https://www.vtupulse.com/artificial-intelligence/implementation-of-ao-star-search-algorithm-in-python/
 class Graph:
-    def __init__(self, graph, heuristicNodeList, startNode):
+    def __init__(self, graph, hnl, startNode):
         self.graph = graph
-        self.H = heuristicNodeList
+        self.H = hnl
         self.start = startNode
         self.parent = {}
         self.status = {}
@@ -16,9 +16,9 @@ class Graph:
 
     def setStatus(self, v, val): self.status[v] = val
 
-    def getHeuristicNodeValue(self, n): return self.H.get(n, 0)
+    def gethnvl(self, n): return self.H.get(n, 0)
 
-    def setHeuristicNodeValue(self, n, value): self.H[n] = value
+    def sethnvl(self, n, value): self.H[n] = value
 
     def printSolution(self):
         print("FOR GRAPH SOLUTION, TRAVERSE THE GRAPH FROM THE START NODE:", self.start)
@@ -26,26 +26,26 @@ class Graph:
         print(self.solutionGraph)
         print("------------------------------------------------------------")
 
-    def computeMinimumCostChildNodes(self, v):
+    def computeMinimum(self, v):
         minimumCost = 0
-        costToChildNodeListDict = {}
-        costToChildNodeListDict[minimumCost] = []
+        ctcnl = {}
+        ctcnl[minimumCost] = []
         flag = True
         for nodeInfoTupleList in self.getNeighbors(v):
             cost = 0
             nodeList = []
             for c, weight in nodeInfoTupleList:
-                cost = cost+self.getHeuristicNodeValue(c)+weight
+                cost = cost+self.gethnvl(c)+weight
                 nodeList.append(c)
             if flag == True:
                 minimumCost = cost
-                costToChildNodeListDict[minimumCost] = nodeList
+                ctcnl[minimumCost] = nodeList
                 flag = False
             else:
                 if minimumCost > cost:
                     minimumCost = cost
-                    costToChildNodeListDict[minimumCost] = nodeList
-        return minimumCost, costToChildNodeListDict[minimumCost]
+                    ctcnl[minimumCost] = nodeList
+        return minimumCost, ctcnl[minimumCost]
 
     def aoStar(self, v, backTracking):
         print("HEURISTIC VALUES :", self.H)
@@ -53,9 +53,9 @@ class Graph:
         print("PROCESSING NODE :", v)
         print("--------------------------------------------------------------------")
         if self.getStatus(v) >= 0:
-            minimumCost, childNodeList = self.computeMinimumCostChildNodes(v)
+            minimumCost, childNodeList = self.computeMinimum(v)
             print(minimumCost, childNodeList)
-            self.setHeuristicNodeValue(v, minimumCost)
+            self.sethnvl(v, minimumCost)
             self.setStatus(v, len(childNodeList))
             solved = True
             for childNode in childNodeList:
